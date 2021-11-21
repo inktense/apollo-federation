@@ -3,14 +3,14 @@ import { gql } from 'apollo-server'
 export const typeDefs = gql`
 
 type Character @key(fields: "id"){
-    id: ID!
+    id: ID
     name: String
     birthYear: String
     eyeColor: String
     skinColor: String
     gender: String
-    height: Int
-    mass: Int
+    height: String
+    mass: String
 }
 
 extend type Query {

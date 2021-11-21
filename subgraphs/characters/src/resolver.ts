@@ -1,16 +1,17 @@
 import { CharacterResolvers, QueryCharacterArgs } from './types'
-
-// interface Resolvers {
-//   Query: QueryResolvers<any>,
-// }
+import { getData } from './utils'
 
 export const characterResolver: CharacterResolvers = {
   Query: {
-    character: (_parent: undefined, args: QueryCharacterArgs, context: any) => {
-     console.log('id => ', args)
+    character: async (_parent: undefined, args: QueryCharacterArgs, context: any) => {
+      const { id } = args
+
+      const character = await getData(id)
+     return character
     }, 
-    characters: (_parent: undefined, args: any, context: any) => {
-      console.log("here")
+    characters: async (_parent: undefined, args: any, context: any) => {
+      const characters = await getData()
+      return characters?.results
     }
   }
 }

@@ -16,7 +16,7 @@
   \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"characterResolver\": () => (/* binding */ characterResolver)\n/* harmony export */ });\nconst characterResolver = {\n  Query: {\n    character: (_parent, args, context) => {\n      console.log(\"id => \", args);\n    },\n    characters: (_parent, args, context) => {\n      console.log(\"here\");\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"characterResolver\": () => (/* binding */ characterResolver)\n/* harmony export */ });\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\nconst characterResolver = {\n  Query: {\n    character: async (_parent, args, context) => {\n      const { id } = args;\n      const character = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)(id);\n      return character;\n    },\n    characters: async (_parent, args, context) => {\n      const characters = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)();\n      return characters?.results;\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
 
 /***/ }),
 
@@ -26,7 +26,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"typeDefs\": () => (/* binding */ typeDefs)\n/* harmony export */ });\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n\nconst typeDefs = apollo_server__WEBPACK_IMPORTED_MODULE_0__.gql`\n\ntype Character @key(fields: \"id\"){\n    id: ID!\n    name: String\n    birthYear: String\n    eyeColor: String\n    skinColor: String\n    gender: String\n    height: Int\n    mass: Int\n}\n\nextend type Query {\n    character(id: ID!): Character\n    characters: [Character]\n}\n`;\n\n\n//# sourceURL=webpack://subgraph-characters/./src/schema.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"typeDefs\": () => (/* binding */ typeDefs)\n/* harmony export */ });\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n\nconst typeDefs = apollo_server__WEBPACK_IMPORTED_MODULE_0__.gql`\n\ntype Character @key(fields: \"id\"){\n    id: ID\n    name: String\n    birthYear: String\n    eyeColor: String\n    skinColor: String\n    gender: String\n    height: String\n    mass: String\n}\n\nextend type Query {\n    character(id: ID!): Character\n    characters: [Character]\n}\n`;\n\n\n//# sourceURL=webpack://subgraph-characters/./src/schema.ts?");
 
 /***/ }),
 
@@ -37,6 +37,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/subgraph */ \"@apollo/subgraph\");\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./schema */ \"./src/schema.ts\");\n/* harmony import */ var _resolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resolver */ \"./src/resolver.ts\");\n\n\n\n\nconst server = new apollo_server__WEBPACK_IMPORTED_MODULE_0__.ApolloServer({\n  schema: (0,_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__.buildSubgraphSchema)([{ typeDefs: _schema__WEBPACK_IMPORTED_MODULE_2__.typeDefs, resolvers: _resolver__WEBPACK_IMPORTED_MODULE_3__.characterResolver }])\n});\nserver.listen().then(({ url }) => {\n  console.log(`\\u{1F680}  Server ready at ${url}`);\n});\n\n\n//# sourceURL=webpack://subgraph-characters/./src/server.ts?");
+
+/***/ }),
+
+/***/ "./src/utils.ts":
+/*!**********************!*\
+  !*** ./src/utils.ts ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"getData\": () => (/* binding */ getData)\n/* harmony export */ });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"axios\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\nconst getData = async (id) => {\n  try {\n    const result = await axios__WEBPACK_IMPORTED_MODULE_0___default()({\n      method: \"get\",\n      url: `https://swapi.dev/api/people/` + (id ? `${id}/` : \"\")\n    });\n    return result.data;\n  } catch (error) {\n    console.error(`Error making SWAPI request: ${error}`);\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/utils.ts?");
 
 /***/ }),
 
@@ -57,6 +67,16 @@ module.exports = require("@apollo/subgraph");
 /***/ ((module) => {
 
 module.exports = require("apollo-server");
+
+/***/ }),
+
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
+/***/ ((module) => {
+
+module.exports = require("axios");
 
 /***/ })
 
