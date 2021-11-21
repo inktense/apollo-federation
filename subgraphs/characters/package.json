@@ -1,0 +1,36 @@
+{
+    "name": "subgraph-characters",
+    "version": "1.1.21",
+    "description": "",
+    "main": "products.js",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com-personal:inktense/apollo-federation.git"
+    },
+    "scripts": {
+        "codegen": "graphql-codegen --config codegen.yml",
+        "build": "npx tsc",
+        "start": "npm-run-all --parallel watch:server watch:build",
+        "watch:build": "webpack --watch",
+        "watch:server": "nodemon \".webpack/index.js\" --watch \".webpack\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@apollo/federation": "0.33.6",
+        "@apollo/subgraph": "^0.1.4",
+        "apollo-server": "3.5.0",
+        "graphql": "15.7.2"
+    },
+    "devDependencies": {
+        "@graphql-codegen/cli": "^2.2.2",
+        "@graphql-codegen/introspection": "^2.1.0",
+        "@graphql-codegen/typescript": "^2.3.1",
+        "@graphql-codegen/typescript-resolvers": "^2.4.1",
+        "nodemon": "^2.0.15",
+        "typescript": "^4.5.2",
+        "webpack": "^5.64.1",
+        "webpack-node-externals": "^3.0.0"
+    }
+}
