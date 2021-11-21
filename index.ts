@@ -1,9 +1,18 @@
 import { ApolloServer } from 'apollo-server';
+import { ApolloGateway, LocalGraphQLDataSource } from '@apollo/gateway'
+import { buildSubgraphSchema } from '@apollo/subgraph';
 
-import resolvers from './src/graphql/resolvers/test';
-import typeDefs from './src/graphql/schema/test';
+import { 
+    CharactersService
+} from './src/graphql/services'
 
-const server = new ApolloServer({ resolvers, typeDefs });
+const gateway = new ApolloGateway({
+    serviceList: [ CharactersService ],
+    // schema: buildSubgraphSchema([{ CharactersService }])
+ //  buildService: service => new LocalGraphQLDataSource(buildSubgraphSchema([service])),
+  })
+
+const server = new ApolloServer({ gateway });
 
   server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`)
