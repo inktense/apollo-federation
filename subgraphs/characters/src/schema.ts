@@ -18,6 +18,13 @@ type Character @key(fields: "id"){
     height: String
     # The mass of the character in kilograms.
     mass: String
+    # An array of species that this character belongs to.
+    species: [Species]
+}
+
+# This is a "stub" of the Species entity 
+extend type Species @key(fields: "id") {
+  id: ID @external
 }
 
 extend type Query {
