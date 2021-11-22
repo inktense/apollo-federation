@@ -2,7 +2,7 @@ import { gql } from 'apollo-server'
 
 export const typeDefs = gql`
 
-type Species {
+type Species @key(fields: "id"){
   id: ID
   # The name of this species.
   name: String 
