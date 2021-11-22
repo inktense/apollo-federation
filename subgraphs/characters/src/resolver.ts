@@ -7,6 +7,7 @@ export const characterResolver: CharacterResolvers = {
       const { id } = args
 
       const character = await getData(id)
+      //const formattedCharacter = { ...otherProps}
      return character
     }, 
     characters: async (_parent: undefined, args: any, context: any) => {
