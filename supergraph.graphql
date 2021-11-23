@@ -1,0 +1,79 @@
+schema
+  @core(feature: "https://specs.apollo.dev/core/v0.2"),
+  @core(feature: "https://specs.apollo.dev/join/v0.1", for: EXECUTION)
+{
+  query: Query
+}
+
+directive @core(as: String, feature: String!, for: core__Purpose) repeatable on SCHEMA
+
+directive @join__field(graph: join__Graph, provides: join__FieldSet, requires: join__FieldSet) on FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__owner(graph: join__Graph!) on INTERFACE | OBJECT
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet) repeatable on INTERFACE | OBJECT
+
+type Character
+  @join__owner(graph: CHARACTERS)
+  @join__type(graph: CHARACTERS, key: "id")
+{
+  birthYear: String @join__field(graph: CHARACTERS)
+  eyeColor: String @join__field(graph: CHARACTERS)
+  gender: String @join__field(graph: CHARACTERS)
+  height: String @join__field(graph: CHARACTERS)
+  id: ID @join__field(graph: CHARACTERS)
+  mass: String @join__field(graph: CHARACTERS)
+  name: String @join__field(graph: CHARACTERS)
+  skinColor: String @join__field(graph: CHARACTERS)
+  species: [Species] @join__field(graph: CHARACTERS)
+}
+
+type Query {
+  allSpecies: [Species] @join__field(graph: SPECIES)
+  character(id: ID!): Character @join__field(graph: CHARACTERS)
+  characters: [Character] @join__field(graph: CHARACTERS)
+  species(id: ID!): Species @join__field(graph: SPECIES)
+}
+
+type Species
+  @join__owner(graph: SPECIES)
+  @join__type(graph: SPECIES, key: "id")
+  @join__type(graph: CHARACTERS, key: "id")
+{
+  averageHeight: String @join__field(graph: SPECIES)
+  averageLifespan: String @join__field(graph: SPECIES)
+  characters: [String] @join__field(graph: SPECIES)
+  classification: String @join__field(graph: SPECIES)
+  created: String @join__field(graph: SPECIES)
+  designation: String @join__field(graph: SPECIES)
+  eyeColors: String @join__field(graph: SPECIES)
+  films: [String] @join__field(graph: SPECIES)
+  hairColors: String @join__field(graph: SPECIES)
+  homeworld: String @join__field(graph: SPECIES)
+  id: ID @join__field(graph: SPECIES)
+  language: String @join__field(graph: SPECIES)
+  name: String @join__field(graph: SPECIES)
+  skinColors: String @join__field(graph: SPECIES)
+  url: String @join__field(graph: SPECIES)
+}
+
+enum core__Purpose {
+  """
+  `EXECUTION` features provide metadata necessary to for operation execution.
+  """
+  EXECUTION
+
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  CHARACTERS @join__graph(name: "characters" url: "http://localhost:4002/graphql")
+  SPECIES @join__graph(name: "species" url: "http://localhost:4001/graphql")
+}

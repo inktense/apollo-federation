@@ -1,8 +1,11 @@
 import { ApolloServer } from 'apollo-server'
 import { buildSubgraphSchema } from "@apollo/subgraph"
+import { gql } from 'apollo-server'
+import { readFileSync } from 'fs'
 
-import { typeDefs } from './schema'
 import { speciesResolver as resolvers } from './resolver'
+
+const typeDefs = gql(readFileSync('./schema.graphql', { encoding: 'utf-8' }))
 
 
 const server = new ApolloServer({ 
