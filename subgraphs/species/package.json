@@ -22,7 +22,8 @@
         "@apollo/subgraph": "^0.1.4",
         "apollo-server": "3.5.0",
         "graphql": "15.7.2",
-        "axios": "^0.21.1"
+        "axios": "^0.21.1",
+        "node-fetch": "^2.6.6"
     },
     "devDependencies": {
         "@graphql-codegen/cli": "^2.2.2",

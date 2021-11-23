@@ -19,11 +19,12 @@ export type Character = {
   birthYear?: Maybe<Scalars['String']>;
   eyeColor?: Maybe<Scalars['String']>;
   gender?: Maybe<Scalars['String']>;
-  height?: Maybe<Scalars['Int']>;
-  id: Scalars['ID'];
-  mass?: Maybe<Scalars['Int']>;
+  height?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  mass?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   skinColor?: Maybe<Scalars['String']>;
+  species?: Maybe<Array<Maybe<Species>>>;
 };
 
 export type Query = {
@@ -35,6 +36,11 @@ export type Query = {
 
 export type QueryCharacterArgs = {
   id: Scalars['ID'];
+};
+
+export type Species = {
+  __typename?: 'Species';
+  id?: Maybe<Scalars['ID']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -110,8 +116,8 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Character: ResolverTypeWrapper<Character>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   Query: ResolverTypeWrapper<{}>;
+  Species: ResolverTypeWrapper<Species>;
   String: ResolverTypeWrapper<Scalars['String']>;
 }>;
 
@@ -120,8 +126,8 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   Character: Character;
   ID: Scalars['ID'];
-  Int: Scalars['Int'];
   Query: {};
+  Species: Species;
   String: Scalars['String'];
 }>;
 
@@ -129,11 +135,12 @@ export type CharacterResolvers<ContextType = any, ParentType extends ResolversPa
   birthYear?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   eyeColor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   gender?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  height?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  mass?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  height?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  mass?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   skinColor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -142,8 +149,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   characters?: Resolver<Maybe<Array<Maybe<ResolversTypes['Character']>>>, ParentType, ContextType>;
 }>;
 
+export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = any> = ResolversObject<{
   Character?: CharacterResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Species?: SpeciesResolvers<ContextType>;
 }>;
 

@@ -16,17 +16,7 @@
   \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"speciesResolver\": () => (/* binding */ speciesResolver)\n/* harmony export */ });\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\nconst speciesResolver = {\n  Query: {\n    species: async (_parent, args, context) => {\n      const { id } = args;\n      const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)(id);\n      return species;\n    },\n    allSpecies: async (_parent, args, context) => {\n      const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)();\n      return species?.results;\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
-
-/***/ }),
-
-/***/ "./src/schema.ts":
-/*!***********************!*\
-  !*** ./src/schema.ts ***!
-  \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"typeDefs\": () => (/* binding */ typeDefs)\n/* harmony export */ });\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n\nconst typeDefs = apollo_server__WEBPACK_IMPORTED_MODULE_0__.gql`\n\ntype Species @key(fields: \"id\"){\n  id: ID\n  # The name of this species.\n  name: String \n  # The classification of this species, such as \"mammal\" or \"reptile\".\n  classification: String\n  # The designation of this species, such as \"sentient\".\n  designation: String\n  # The average height of this species in centimeters.\n  averageHeight: String\n  # The average lifespan of this species in years.\n  averageLifespan: String\n  # A comma-separated string of common eye colors for this species, \"none\" if this species does not typically have eyes.\n  eyeColors: String\n  # A comma-separated string of common hair colors for this species, \"none\" if this species does not typically have hair.\n  hairColors: String\n  # A comma-separated string of common skin colors for this species, \"none\" if this species does not typically have skin.\n  skinColors: String \n  # The language commonly spoken by this species.\n  language: String \n  # The URL of a planet resource, a planet that this species originates from.\n  homeworld: String \n  # An array of People URL Resources that are a part of this species.\n  characters: [String]\n  # An array of Film URL Resources that this species has appeared in.\n  films: [String] \n  # The hypermedia URL of this resource.\n  url: String\n  # The ISO 8601 date format of the time that this resource was created.\n  created: String\n}\n\nextend type Query {\n    species(id: ID!): Species\n    allSpecies: [Species]\n}\n`;\n\n\n//# sourceURL=webpack://subgraph-characters/./src/schema.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"speciesResolver\": () => (/* binding */ speciesResolver)\n/* harmony export */ });\n/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! node-fetch */ \"node-fetch\");\n/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\n\nconst apiUrl = \"http://localhost:4000\";\nconst speciesResolver = {\n  Query: {\n    species: async (_parent, args, context) => {\n      const { id } = args;\n      const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getData)(id);\n      return species;\n    },\n    allSpecies: async (_parent, args, context) => {\n      const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getData)();\n      return species?.results;\n    }\n  },\n  Species: {\n    __resolveReference(ref) {\n      console.log(ref);\n      return node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`${apiUrl}/characters`).then((res) => res.json());\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
 
 /***/ }),
 
@@ -36,7 +26,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/subgraph */ \"@apollo/subgraph\");\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./schema */ \"./src/schema.ts\");\n/* harmony import */ var _resolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resolver */ \"./src/resolver.ts\");\n\n\n\n\nconst server = new apollo_server__WEBPACK_IMPORTED_MODULE_0__.ApolloServer({\n  schema: (0,_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__.buildSubgraphSchema)([{ typeDefs: _schema__WEBPACK_IMPORTED_MODULE_2__.typeDefs, resolvers: _resolver__WEBPACK_IMPORTED_MODULE_3__.speciesResolver }])\n});\nserver.listen({ port: 4001 }).then(({ url }) => {\n  console.log(`\\u{1F680}  Server ready at ${url}`);\n});\n\n\n//# sourceURL=webpack://subgraph-characters/./src/server.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/subgraph */ \"@apollo/subgraph\");\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ \"fs\");\n/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _resolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resolver */ \"./src/resolver.ts\");\n\n\n\n\n\nconst typeDefs = (0,apollo_server__WEBPACK_IMPORTED_MODULE_0__.gql)((0,fs__WEBPACK_IMPORTED_MODULE_2__.readFileSync)(\"./schema.graphql\", { encoding: \"utf-8\" }));\nconst server = new apollo_server__WEBPACK_IMPORTED_MODULE_0__.ApolloServer({\n  schema: (0,_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__.buildSubgraphSchema)([{ typeDefs, resolvers: _resolver__WEBPACK_IMPORTED_MODULE_3__.speciesResolver }])\n});\nserver.listen({ port: 4001 }).then(({ url }) => {\n  console.log(`\\u{1F680}  Server ready at ${url}`);\n});\n\n\n//# sourceURL=webpack://subgraph-characters/./src/server.ts?");
 
 /***/ }),
 
@@ -77,6 +67,26 @@ module.exports = require("apollo-server");
 /***/ ((module) => {
 
 module.exports = require("axios");
+
+/***/ }),
+
+/***/ "node-fetch":
+/*!*****************************!*\
+  !*** external "node-fetch" ***!
+  \*****************************/
+/***/ ((module) => {
+
+module.exports = require("node-fetch");
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/***/ ((module) => {
+
+module.exports = require("fs");
 
 /***/ })
 
