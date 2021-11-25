@@ -16,7 +16,7 @@
   \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"characterResolver\": () => (/* binding */ characterResolver)\n/* harmony export */ });\n/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! node-fetch */ \"node-fetch\");\n/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\n\nconst speciesUrl = \"http://localhost:4000\";\nconst characterResolver = {\n  Query: {\n    character: async (_parent, args, context) => {\n      const { id } = args;\n      const character = await (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getData)(id);\n      return character;\n    },\n    characters: async (_parent, args, context) => {\n      const characters = await (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getData)();\n      return characters?.results;\n    }\n  },\n  Character: {\n    async species(character) {\n      const { species } = character;\n      if (species?.length) {\n        const test = await Promise.all(species?.map(async (item) => {\n          const substring = item?.split(/[//]/);\n          const id = substring[substring.length - 2];\n          const res = await node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`${speciesUrl}/species`);\n          const characterSpecies = res.json();\n          console.log(\"test \", item, characterSpecies);\n        }));\n      }\n      return { __typename: \"Species\", id: character.id };\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"characterResolver\": () => (/* binding */ characterResolver)\n/* harmony export */ });\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\nconst characterResolver = {\n  Query: {\n    character: async (_parent, args, context) => {\n      const { id } = args;\n      const character = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)(id);\n      return character;\n    },\n    characters: async (_parent, args, context) => {\n      const characters = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)();\n      console.log(characters?.results);\n      return characters?.results;\n    }\n  },\n  Character: {\n    species({ species }) {\n      console.log(\"species, \", species);\n      let test = [];\n      if (species?.length) {\n        test = species.map((item) => {\n          const substring = item?.split(/[//]/);\n          const id = substring[substring.length - 2];\n          console.log(\"item => \", id);\n          return { __typename: \"Species\", id };\n        });\n      }\n      console.log(\"test => \", test);\n      return test;\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
 
 /***/ }),
 
@@ -67,16 +67,6 @@ module.exports = require("apollo-server");
 /***/ ((module) => {
 
 module.exports = require("axios");
-
-/***/ }),
-
-/***/ "node-fetch":
-/*!*****************************!*\
-  !*** external "node-fetch" ***!
-  \*****************************/
-/***/ ((module) => {
-
-module.exports = require("node-fetch");
 
 /***/ }),
 

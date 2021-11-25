@@ -1,7 +1,8 @@
 import { ApolloServer } from 'apollo-server'
-import { buildSubgraphSchema } from "@apollo/subgraph"
+import { buildSubgraphSchema } from "@apollo/federation"
 import { gql } from 'apollo-server'
 import { readFileSync } from 'fs'
+//const { buildFederatedSchema } = require('@apollo/federation');
 
 import { speciesResolver as resolvers } from './resolver'
 
@@ -13,5 +14,5 @@ const server = new ApolloServer({
 });
 
   server.listen({port: 4001}).then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`)
+    console.log(`🚀  Species server ready at ${url}`)
   })

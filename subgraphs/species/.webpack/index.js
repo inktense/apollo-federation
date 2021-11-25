@@ -16,7 +16,7 @@
   \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"speciesResolver\": () => (/* binding */ speciesResolver)\n/* harmony export */ });\n/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! node-fetch */ \"node-fetch\");\n/* harmony import */ var node_fetch__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(node_fetch__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\n\nconst apiUrl = \"http://localhost:4000\";\nconst speciesResolver = {\n  Query: {\n    species: async (_parent, args, context) => {\n      const { id } = args;\n      const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getData)(id);\n      return species;\n    },\n    allSpecies: async (_parent, args, context) => {\n      const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_1__.getData)();\n      return species?.results;\n    }\n  },\n  Species: {\n    __resolveReference(ref) {\n      console.log(ref);\n      return node_fetch__WEBPACK_IMPORTED_MODULE_0___default()(`${apiUrl}/characters`).then((res) => res.json());\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"speciesResolver\": () => (/* binding */ speciesResolver)\n/* harmony export */ });\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\nconst formatSpecies = (responseData) => {\n  console.log(responseData);\n  const {\n    average_height: averageHeight,\n    skin_colors: skinColors,\n    hair_colors: hairColors,\n    eye_colors: eyeColors,\n    average_lifespan: averageLifespan,\n    ...rest\n  } = responseData;\n  return {\n    averageHeight,\n    averageLifespan,\n    eyeColors,\n    hairColors,\n    skinColors,\n    ...rest\n  };\n};\nconst speciesResolver = {\n  Query: {\n    species: async (_parent, args, context) => {\n      const { id } = args;\n      try {\n        const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)(id);\n        const formatedSpecies = formatSpecies(species);\n        return formatedSpecies;\n      } catch (error) {\n        console.log(`Error in Species resolver. ${error}`);\n        return null;\n      }\n    },\n    allSpecies: async (_parent, args, context) => {\n      try {\n        const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)();\n        const formatedSpecies = species?.results.map((item) => {\n          return formatSpecies(item);\n        });\n        return formatedSpecies;\n      } catch (error) {\n        console.log(`Error in allSpecies resolver. ${error}`);\n        return null;\n      }\n    }\n  },\n  Species: {\n    async __resolveReference(reference) {\n      const { id } = reference;\n      const species = await (0,_utils__WEBPACK_IMPORTED_MODULE_0__.getData)(id);\n      return species;\n    }\n  }\n};\n\n\n//# sourceURL=webpack://subgraph-characters/./src/resolver.ts?");
 
 /***/ }),
 
@@ -26,7 +26,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/subgraph */ \"@apollo/subgraph\");\n/* harmony import */ var _apollo_subgraph__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ \"fs\");\n/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _resolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resolver */ \"./src/resolver.ts\");\n\n\n\n\n\nconst typeDefs = (0,apollo_server__WEBPACK_IMPORTED_MODULE_0__.gql)((0,fs__WEBPACK_IMPORTED_MODULE_2__.readFileSync)(\"./schema.graphql\", { encoding: \"utf-8\" }));\nconst server = new apollo_server__WEBPACK_IMPORTED_MODULE_0__.ApolloServer({\n  schema: (0,_apollo_subgraph__WEBPACK_IMPORTED_MODULE_1__.buildSubgraphSchema)([{ typeDefs, resolvers: _resolver__WEBPACK_IMPORTED_MODULE_3__.speciesResolver }])\n});\nserver.listen({ port: 4001 }).then(({ url }) => {\n  console.log(`\\u{1F680}  Server ready at ${url}`);\n});\n\n\n//# sourceURL=webpack://subgraph-characters/./src/server.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n/* harmony import */ var apollo_server__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _apollo_federation__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @apollo/federation */ \"@apollo/federation\");\n/* harmony import */ var _apollo_federation__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_apollo_federation__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ \"fs\");\n/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _resolver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resolver */ \"./src/resolver.ts\");\n\n\n\n\n\nconst typeDefs = (0,apollo_server__WEBPACK_IMPORTED_MODULE_0__.gql)((0,fs__WEBPACK_IMPORTED_MODULE_2__.readFileSync)(\"./schema.graphql\", { encoding: \"utf-8\" }));\nconst server = new apollo_server__WEBPACK_IMPORTED_MODULE_0__.ApolloServer({\n  schema: (0,_apollo_federation__WEBPACK_IMPORTED_MODULE_1__.buildSubgraphSchema)([{ typeDefs, resolvers: _resolver__WEBPACK_IMPORTED_MODULE_3__.speciesResolver }])\n});\nserver.listen({ port: 4001 }).then(({ url }) => {\n  console.log(`\\u{1F680}  Species server ready at ${url}`);\n});\n\n\n//# sourceURL=webpack://subgraph-characters/./src/server.ts?");
 
 /***/ }),
 
@@ -40,13 +40,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "@apollo/subgraph":
-/*!***********************************!*\
-  !*** external "@apollo/subgraph" ***!
-  \***********************************/
+/***/ "@apollo/federation":
+/*!*************************************!*\
+  !*** external "@apollo/federation" ***!
+  \*************************************/
 /***/ ((module) => {
 
-module.exports = require("@apollo/subgraph");
+module.exports = require("@apollo/federation");
 
 /***/ }),
 
@@ -67,16 +67,6 @@ module.exports = require("apollo-server");
 /***/ ((module) => {
 
 module.exports = require("axios");
-
-/***/ }),
-
-/***/ "node-fetch":
-/*!*****************************!*\
-  !*** external "node-fetch" ***!
-  \*****************************/
-/***/ ((module) => {
-
-module.exports = require("node-fetch");
 
 /***/ }),
 

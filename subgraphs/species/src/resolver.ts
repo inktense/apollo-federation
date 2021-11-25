@@ -1,28 +1,62 @@
-import fetch from 'node-fetch'
-
-import { SpeciesResolvers, QuerySpeciesArgs } from './types'
+import { Species, SpeciesResolvers, QuerySpeciesArgs } from './types'
 import { getData } from './utils'
 
-const apiUrl = "http://localhost:4000"
+const formatSpecies = (responseData: any) => {
+  console.log(responseData)
+  const {
+    average_height: averageHeight,
+    skin_colors: skinColors,
+    hair_colors: hairColors,
+    eye_colors: eyeColors,
+    average_lifespan: averageLifespan,
+    ...rest
+  } = responseData
+
+  return { 
+    averageHeight,
+    averageLifespan,
+    eyeColors,
+    hairColors,
+    skinColors,
+    ...rest
+  }
+}
 
 export const speciesResolver: SpeciesResolvers = {
   Query: {
     species: async (_parent: undefined, args: QuerySpeciesArgs, context: any) => {
       const { id } = args
 
-      const species = await getData(id)
-      //const formattedCharacter = { ...otherProps}
-     return species
+      try {
+        const species = await getData(id)
+        const formatedSpecies = formatSpecies(species)
+        
+        return formatedSpecies
+      } catch (error) {
+        console.log(`Error in Species resolver. ${error}`)
+        return null
+      }
     }, 
+
     allSpecies: async (_parent: undefined, args: any, context: any) => {
-      const species = await getData()
-      return species?.results
+      try {
+        const species = await getData()
+        const formatedSpecies = species?.results.map((item: any) => {
+          return formatSpecies(item)
+        })
+
+        return formatedSpecies
+      } catch (error) {
+        console.log(`Error in allSpecies resolver. ${error}`)
+        return null
+      }
     }
   },
   Species: {
-    __resolveReference(ref) {
-      console.log(ref)
-      return fetch(`${apiUrl}/characters`).then(res => res.json());
+    async __resolveReference(reference) {
+      const { id } = reference
+      const species = await getData(id)
+      return species
     }
   }
 }
