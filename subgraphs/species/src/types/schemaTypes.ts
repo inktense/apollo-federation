@@ -14,6 +14,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type Character = {
+  __typename?: 'Character';
+  id?: Maybe<Scalars['ID']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   allSpecies?: Maybe<Array<Maybe<Species>>>;
@@ -29,6 +34,7 @@ export type Species = {
   __typename?: 'Species';
   averageHeight?: Maybe<Scalars['String']>;
   averageLifespan?: Maybe<Scalars['String']>;
+  characters?: Maybe<Array<Maybe<Character>>>;
   classification?: Maybe<Scalars['String']>;
   created?: Maybe<Scalars['String']>;
   designation?: Maybe<Scalars['String']>;
@@ -39,9 +45,7 @@ export type Species = {
   id?: Maybe<Scalars['ID']>;
   language?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  people?: Maybe<Array<Maybe<Scalars['String']>>>;
   skinColors?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -115,6 +119,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Character: ResolverTypeWrapper<Character>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Query: ResolverTypeWrapper<{}>;
   Species: ResolverTypeWrapper<Species>;
@@ -124,10 +129,16 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
+  Character: Character;
   ID: Scalars['ID'];
   Query: {};
   Species: Species;
   String: Scalars['String'];
+}>;
+
+export type CharacterResolvers<ContextType = any, ParentType extends ResolversParentTypes['Character'] = ResolversParentTypes['Character']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -138,6 +149,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type SpeciesResolvers<ContextType = any, ParentType extends ResolversParentTypes['Species'] = ResolversParentTypes['Species']> = ResolversObject<{
   averageHeight?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   averageLifespan?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  characters?: Resolver<Maybe<Array<Maybe<ResolversTypes['Character']>>>, ParentType, ContextType>;
   classification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   created?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   designation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -148,13 +160,12 @@ export type SpeciesResolvers<ContextType = any, ParentType extends ResolversPare
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  people?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   skinColors?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  Character?: CharacterResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Species?: SpeciesResolvers<ContextType>;
 }>;

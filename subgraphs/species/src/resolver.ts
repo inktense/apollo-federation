@@ -1,8 +1,8 @@
-import { Species, SpeciesResolvers, QuerySpeciesArgs } from './types'
+import { Species, SpeciesResolvers, QuerySpeciesArgs } from './types/schemaTypes'
+import { SpeciesDTO } from './types/species'
 import { getData } from './utils'
 
-const formatSpecies = (responseData: any) => {
-  console.log(responseData)
+const formatSpecies = (responseData: any): Species => {
   const {
     average_height: averageHeight,
     skin_colors: skinColors,
@@ -28,8 +28,8 @@ export const speciesResolver: SpeciesResolvers = {
       const { id } = args
 
       try {
-        const species = await getData(id)
-        const formatedSpecies = formatSpecies(species)
+        const species: SpeciesDTO = await getData(id)
+        const formatedSpecies: Species = formatSpecies(species)
         
         return formatedSpecies
       } catch (error) {
@@ -41,7 +41,7 @@ export const speciesResolver: SpeciesResolvers = {
     allSpecies: async (_parent: undefined, args: any, context: any) => {
       try {
         const species = await getData()
-        const formatedSpecies = species?.results.map((item: any) => {
+        const formatedSpecies: [Species] = species.results.map((item: any) => {
           return formatSpecies(item)
         })
 
@@ -55,8 +55,14 @@ export const speciesResolver: SpeciesResolvers = {
   Species: {
     async __resolveReference(reference) {
       const { id } = reference
-      const species = await getData(id)
-      return species
+      const species: SpeciesDTO = await getData(id)
+      const formatedSpecies: Species = formatSpecies(species)
+
+      return formatedSpecies
+    },
+
+    character({character}) {
+      console.log('character, ', character)
     }
   }
 }

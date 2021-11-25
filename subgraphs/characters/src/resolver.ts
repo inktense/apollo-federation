@@ -7,29 +7,31 @@ export const characterResolver: CharacterResolvers = {
       const { id } = args
 
       const character = await getData(id)
-     // console.log(character.species)
-      //const formattedCharacter = { ...otherProps}
      return character
     }, 
     characters: async (_parent: undefined, args: any, context: any) => {
       const characters = await getData()
-      console.log(characters?.results)
+      console.log(characters.results)
       return characters?.results
     },
   },
   Character: {
+    async __resolveReference(reference) {
+      console.log("ref" , reference)
+      const { id } = reference
+      const character = await getData(id)
+      return character
+    },
+
     species({ species }) {
-      console.log('species, ', species)
       let test = []
       if(species?.length) {
         test = species.map((item) => {
           const substring = item?.split(/[//]/)
           const id = substring[substring.length - 2]
-          console.log("item => ", id)
           return { __typename: "Species", id };
         })
       }
-      console.log("test => ", test)
       return test
     }
   }

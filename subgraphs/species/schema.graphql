@@ -21,13 +21,15 @@ type Species @key(fields: "id"){
   # The URL of a planet resource, a planet that this species originates from.
   homeworld: String 
   # An array of People URL Resources that are a part of this species.
-  characters: [String]
+  characters: [Character]
   # An array of Film URL Resources that this species has appeared in.
   films: [String] 
-  # The hypermedia URL of this resource.
-  url: String
   # The ISO 8601 date format of the time that this resource was created.
   created: String
+}
+
+extend type Character @key(fields: "id") {
+  id: ID @external
 }
 
 extend type Query {
