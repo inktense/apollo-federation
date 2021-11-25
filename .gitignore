@@ -105,5 +105,9 @@ dist
 
 .DS_Store
 
+# ENV files
 .env
 !.env.template
+
+# Webpack build file
+.webpack
