@@ -21,17 +21,32 @@ const formatCharacter = (responseData: any): Character => {
 
 export const characterResolver: CharacterResolvers = {
   Query: {
-    character: async (_parent: undefined, args: QueryCharacterArgs, context: any): Promise<Character> => {
+    character: async (_parent: undefined, args: QueryCharacterArgs, context: any): Promise<Character| null> => {
       const { id } = args
 
-      const character = await getData(id)
-      const formatedCharacter: Character = formatCharacter(character)
-     return formatedCharacter
+      try {
+        const character = await getData(id)
+        const formatedCharacter: Character = formatCharacter(character)
+
+        return formatedCharacter
+      } catch (error) {
+        console.log(`Error in Character resolver. ${error}`)
+        return null
+    }
     }, 
 
-    characters: async (_parent: undefined, args: any, context: any): Promise<Character[]> => {
+    characters: async (_parent: undefined, args: any, context: any): Promise<Character[] | null> => {
+      try {
       const characters = await getData()
-      return characters?.results
+      const formatedCharacters: [Character] = characters.results.map((item: any) => {
+        return formatCharacter(item)
+      })
+
+      return formatedCharacters
+      } catch (error) {
+        console.log(`Error in allSpecies resolver. ${error}`)
+        return null
+      }
     },
   },
   Character: {
