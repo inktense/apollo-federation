@@ -17,13 +17,14 @@ export type Scalars = {
 export type Character = {
   __typename?: 'Character';
   birthYear?: Maybe<Scalars['String']>;
-  eyeColor?: Maybe<Scalars['String']>;
+  eyeColors?: Maybe<Scalars['String']>;
   gender?: Maybe<Scalars['String']>;
+  hairColors?: Maybe<Scalars['String']>;
   height?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   mass?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  skinColor?: Maybe<Scalars['String']>;
+  skinColors?: Maybe<Scalars['String']>;
   species?: Maybe<Array<Maybe<Species>>>;
 };
 
@@ -133,13 +134,14 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type CharacterResolvers<ContextType = any, ParentType extends ResolversParentTypes['Character'] = ResolversParentTypes['Character']> = ResolversObject<{
   birthYear?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  eyeColor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  eyeColors?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   gender?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hairColors?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   height?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   mass?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  skinColor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  skinColors?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   species?: Resolver<Maybe<Array<Maybe<ResolversTypes['Species']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

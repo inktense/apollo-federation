@@ -2,13 +2,14 @@ import { Species, SpeciesResolvers, QuerySpeciesArgs } from './types/schemaTypes
 import { SpeciesDTO } from './types/species'
 import { getData } from './utils'
 
-const formatSpecies = (responseData: any): Species => {
+const formatSpecies = (responseData: SpeciesDTO): Species => {
   const {
     average_height: averageHeight,
     skin_colors: skinColors,
     hair_colors: hairColors,
     eye_colors: eyeColors,
     average_lifespan: averageLifespan,
+    people,
     ...rest
   } = responseData
 
@@ -18,13 +19,14 @@ const formatSpecies = (responseData: any): Species => {
     eyeColors,
     hairColors,
     skinColors,
+    characters: people,
     ...rest
   }
 }
 
 export const speciesResolver: SpeciesResolvers = {
   Query: {
-    species: async (_parent: undefined, args: QuerySpeciesArgs, context: any) => {
+    species: async (_parent: undefined, args: QuerySpeciesArgs, context: any): Promise<Species | null> => {
       const { id } = args
 
       try {
@@ -38,7 +40,7 @@ export const speciesResolver: SpeciesResolvers = {
       }
     }, 
 
-    allSpecies: async (_parent: undefined, args: any, context: any) => {
+    allSpecies: async (_parent: undefined, args: any, context: any): Promise<Species[] | null> => {
       try {
         const species = await getData()
         const formatedSpecies: [Species] = species.results.map((item: any) => {
@@ -61,8 +63,16 @@ export const speciesResolver: SpeciesResolvers = {
       return formatedSpecies
     },
 
-    character({character}) {
-      console.log('character, ', character)
+    characters({ characters }) {
+      let charactersArray = []
+      if(characters?.length) {
+        charactersArray = characters.map((item: any) => {
+          const substring = item?.split(/[//]/)
+          const id = substring[substring.length - 2]
+          return { __typename: "Character", id };
+        })
+      }
+      return charactersArray
     }
   }
 }
