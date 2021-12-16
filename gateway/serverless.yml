@@ -1,0 +1,28 @@
+service: swapi-apollo-federaion
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-west-2
+  stackName: ${opt:stage, 'dev'}-${self:service}
+
+plugins:
+  - serverless-plugin-typescript
+
+custom:
+  webpack:
+    webpackConfig: "webpack.config.js" # Name of webpack configuration file
+    includeModules: false # Node modules configuration for packaging
+    packager: "npm" # Packager that will be used to package your external modules
+
+functions:
+  gateway:
+    handler: gateway.gateway
+    memorySize: 128
+    description: The Apollo gateway for the project
+    timeout: 30
+    events:
+      - http:
+          method: get
+          path: /graphql
+          private: true
+          cors: true
