@@ -37,8 +37,8 @@ export const characterResolver: CharacterResolvers = {
 
     characters: async (_parent: undefined, args: any, context: any): Promise<Character[] | null> => {
       try {
-      const characters = await getData()
-      const formatedCharacters: [Character] = characters.results.map((item: any) => {
+      const characters = await getData() as any
+      const formatedCharacters = characters.result.map((item: any) => {
         return formatCharacter(item)
       })
 
@@ -56,7 +56,8 @@ export const characterResolver: CharacterResolvers = {
       return character
     },
 
-    species({ species }) {
+    species(reference: any) {
+      const { species } =  reference
       let speciesArray = []
       if(species?.length) {
         speciesArray = species.map((item: any) => {
