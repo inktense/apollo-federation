@@ -7,6 +7,7 @@ provider:
 
 plugins:
   - serverless-plugin-typescript
+  - serverless-offline
 
 custom:
   webpack:
@@ -16,7 +17,7 @@ custom:
 
 functions:
   gateway:
-    handler: gateway.gateway
+    handler: gateway.graphqlHandler
     memorySize: 128
     description: The Apollo gateway for the project
     timeout: 30
@@ -24,5 +25,5 @@ functions:
       - http:
           method: get
           path: /graphql
-          private: true
+          # private: true
           cors: true
