@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  gateway:
+    container_name: gateway
+    build:
+      dockerfile: Dockerfile
+      # location of the Dockerfile
+      context: ./gateway
+    ports:
+      - '4000:4000'
+    # networks:
+    #   apollo_network:
+    #     ipv4_address: 10.5.0.5
+
+  characters:
+    container_name: characters
+    build: 
+      dockerfile: Dockerfile
+      context: ./subgraphs/characters
+    # ports:
+    #   - '4002:4002'
+    # networks:
+    #   apollo_network:
+    #     ipv4_address: 10.5.0.6
+
+  species:
+    container_name: species
+    build:
+      dockerfile: Dockerfile
+      context: ./subgraphs/species
+    # ports:
+    #   - '4001:4001'
+    # networks:
+    #   apollo_network:
+    #     ipv4_address: 10.5.0.7
+
+# networks:
+#   apollo_network:
+#     driver: bridge
+#     ipam:
+#       config:
+#         - subnet: 10.5.0.0/16
+#           gateway: 10.5.0.1
+

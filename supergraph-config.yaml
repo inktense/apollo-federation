@@ -2,8 +2,8 @@ subgraphs:
     characters:
       routing_url: http://localhost:4002/graphql
       schema:
-        file: ./subgraphs/characters/src/schema.graphql
+        file: ./subgraphs/characters/schema.graphql
     species:
       routing_url: http://localhost:4001/graphql
       schema:
-        file: ./subgraphs/species/src/schema.graphql
+        file: ./subgraphs/species/schema.graphql
