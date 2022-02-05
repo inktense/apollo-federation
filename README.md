@@ -147,3 +147,5 @@ Find the IP address of a container:
 ```bash
 docker inspect <container_id> | grep IPAddress
 ```
+
+sls --aws-profile <PROFILE> deploy

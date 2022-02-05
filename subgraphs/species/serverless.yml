@@ -1,4 +1,4 @@
-service: swapi-apollo-federation-gateway
+service: swapi-apollo-federation-species
 provider:
   name: aws
   runtime: nodejs14.x
@@ -17,16 +17,7 @@ custom:
 
 functions:
   lambda:
-    handler: gateway.graphqlHandler
+    handler: src/server.graphqlHandler
     memorySize: 128
-    description: The Apollo gateway for the project
+    description: The Apollo species subgraph.
     timeout: 30
-    environment:
-      APOLLO_KEY: SECRET
-      APOLLO_GRAPH_REF: SECRET
-    # events:
-    #   - http:
-    #       method: get
-    #       path: /graphql
-    #       # private: true
-    #       cors: true
